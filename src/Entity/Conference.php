@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ConferenceRepository::class)]
-class Conference
+class Conference implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -27,13 +27,19 @@ class Conference
     /**
      * @var Collection<int, comment>
      */
-    #[ORM\OneToMany(targetEntity: comment::class, mappedBy: 'conference', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'conference', orphanRemoval: true)]
     private Collection $comments;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
     }
+
+    public function __toString(): string
+        {
+            return $this->city.' '.$this->year;
+        }
+    
 
     public function getId(): ?int
     {
@@ -69,7 +75,7 @@ class Conference
         return $this->isInternational;
     }
 
-    public function setInternational(bool $isInternational): static
+    public function setisInternational(bool $isInternational): static
     {
         $this->isInternational = $isInternational;
 
@@ -84,7 +90,7 @@ class Conference
         return $this->comments;
     }
 
-    public function addComment(comment $comment): static
+    public function addComment(Comment $comment): static
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
@@ -94,7 +100,7 @@ class Conference
         return $this;
     }
 
-    public function removeComment(comment $comment): static
+    public function removeComment(Comment $comment): static
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
@@ -106,3 +112,4 @@ class Conference
         return $this;
     }
 }
+
