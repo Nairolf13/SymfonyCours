@@ -23,7 +23,7 @@ final class Version20250114113243 extends AbstractMigration
         $this->addSql('CREATE TABLE category (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE product (
           id SERIAL NOT NULL,
-          category_id INT NOT NULL,
+          category_id INT DEFAULT NULL,
           name VARCHAR(255) NOT NULL,
           price DOUBLE PRECISION NOT NULL,
           description TEXT NOT NULL,
