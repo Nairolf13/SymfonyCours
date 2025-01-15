@@ -36,10 +36,10 @@ class Conference implements \Stringable
     }
 
     public function __toString(): string
-        {
-            return $this->city.' '.$this->year;
-        }
-    
+    {
+        return $this->city . ' ' . $this->year;
+    }
+
 
     public function getId(): ?int
     {
@@ -112,4 +112,3 @@ class Conference implements \Stringable
         return $this;
     }
 }
-

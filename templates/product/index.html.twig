@@ -3,18 +3,17 @@
 {% block title %}Hello ProductController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/florian/guestbook/src/Controller/ProductController.php</code></li>
-        <li>Your template at <code>/home/florian/guestbook/templates/product/index.html.twig</code></li>
-    </ul>
-</div>
+	<div class="container mx-auto px-4 py-6">
+		<h1 class="text-2xl font-bold text-center mb-6">Product List</h1>
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+			{% for product in products %}
+				<a href="{{ path('app_product_show', { id: product.id }) }}" class="block p-4 bg-gray-100 rounded-lg shadow-sm border border-gray-200 hover:shadow-lg transition-shadow text-center">
+					{{ product.name }}
+				</a>
+			{% else %}
+				<p class="text-center text-gray-500">No products found.</p>
+			{% endfor %}
+		</div>
+	</div>
 {% endblock %}
+
