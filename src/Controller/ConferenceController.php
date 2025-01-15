@@ -20,8 +20,15 @@ class ConferenceController extends AbstractController
         ]);
     }
 
-    #[Route('/conference/{id}', name: 'conference')]
-    public function show(Request $request, Conference $conference, CommentRepository $commentRepository): Response    {
+    #[Route('/conference/{slug}', name: 'conference')]
+    public function show(
+        Request $request, 
+        string $slug, 
+        CommentRepository $commentRepository,
+        ConferenceRepository $conferenceRepository
+    ): Response
+    {
+        $conference = $conferenceRepository->findOneBy(['slug' => $slug]);
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $commentRepository->getCommentPaginator($conference, $offset);
 

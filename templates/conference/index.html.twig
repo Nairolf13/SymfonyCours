@@ -3,38 +3,56 @@
 {% block title %}Conference GuestBook{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-gray-100">
-    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
-                Conference
-            </h1>
-            <p class="mt-5 max-w-xl mx-auto text-xl text-gray-500">
-                Give your feedback!
-            </p>
-        </div>
-        
-        <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-2">
-            {% if conferences|length > 0 %}
-                {% for conference in conferences %}
-                    <div class="bg-white overflow-hidden shadow rounded-lg transition-all hover:shadow-lg">
-                        <div class="px-4 py-5 sm:p-6">
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2 text-center">
-                                {{ conference.city }} {{ conference.year }} {{conference.isInternational ? '(International)' : ''}}
-                            </h3>
-                            <div class="flex justify-center items-center mt-4">  
-                                <a href="{{ path('conference', { id: conference.id }) }}" 
-                                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    View Details
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p class="text-center text-gray-500">Aucune conférence disponible pour le moment.</p>
-            {% endif %}
-        </div>
+<div class="text-center relative mb-12">
+    <div class="absolute inset-0 flex items-center justify-center opacity-5">
+        <svg class="w-64 h-64" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6 10h2v2H6zm0 4h8v2H6zm10 0h2v2h-2zm-6-4h8v2h-8z"/>
+        </svg>
     </div>
+    <h1 class="text-5xl font-black text-gray-900 sm:text-6xl sm:tracking-tight lg:text-7xl bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+        Conferences
+    </h1>
+    <p class="mt-6 max-w-2xl mx-auto text-xl text-gray-600 font-medium">
+        Join the discussion and share your feedback!
+    </p>
+</div>
+
+<div class="mt-16 grid gap-10 md:grid-cols-2 lg:grid-cols-2">
+    {% if conferences|length > 0 %}
+        {% for conference in conferences %}
+            <div class="group bg-white overflow-hidden rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="p-8">
+                    <div class="mb-6">
+                        {% if conference.isInternational %}
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+                                International
+                            </span>
+                        {% endif %}
+                    </div>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-indigo-600 transition-all">
+                        {{ conference.city }}
+                        <span class="text-2xl text-gray-600">{{ conference.year }}</span>
+                    </h3>
+                    <div class="mt-8">
+                        <a href="{{ path('conference', { slug: conference.slug } )}}" 
+                           class="inline-flex items-center px-6 py-3 text-base font-medium rounded-xl text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 transform transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <span>View Details</span>
+                            <svg class="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-span-2 text-center py-16">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/>
+            </svg>
+            <h3 class="mt-2 text-xl font-medium text-gray-900">Aucune conférence disponible</h3>
+            <p class="mt-1 text-gray-500">Revenez plus tard pour voir les nouvelles conférences.</p>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

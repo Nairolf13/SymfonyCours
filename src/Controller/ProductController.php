@@ -22,13 +22,14 @@ class ProductController extends AbstractController
         ]);
     }   
 
-    #[Route('/product/{id}', name: 'app_product_show')]
-    public function show(Product $product, ): Response    {
-        {
+    #[Route('/product/{slug}', name: 'app_product_show')]
+    public function show( string $slug, ProductRepository $productRepository): Response    
+    {
+        $product = $productRepository->findOneBy(['slug' => $slug]);
 
         return $this->render('product/show.html.twig',[
             'product' => $product,]);
     }
 
     
-}}
+}

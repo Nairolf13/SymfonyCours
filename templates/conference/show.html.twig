@@ -3,55 +3,83 @@
 {% block title %}Conference Guestbook - {{ conference }}{% endblock %}
 
 {% block body %}
-<div class="min-h-screen bg-gray-100">
-    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h2 class="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl mb-6">
-                {{ conference }} Conference
-            </h2>
+<div class="text-center relative mb-12">
+    <div class="absolute inset-0 flex items-center justify-center opacity-5">
+        <svg class="w-64 h-64" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/>
+        </svg>
+    </div>
+    <h2 class="text-5xl font-black text-gray-900 sm:text-6xl sm:tracking-tight lg:text-7xl bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
+        {{ conference }} Conference
+    </h2>
 
-            {% if comments|length > 0 %}
-                <p class="max-w-xl mx-auto text-xl text-gray-500 mb-4">
-                    There are <span class="font-semibold text-gray-800">{{ comments|length }}</span> comments.
-                </p>
-                <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-2">
-                    {% for comment in comments %}
-                        <div class="bg-white shadow rounded-lg p-6 border border-gray-200 transition-all hover:shadow-lg">
-                            {% if comment.photofilename %}
+    {% if comments|length > 0 %}
+        <p class="mt-6 max-w-2xl mx-auto text-xl text-gray-600 font-medium mb-12">
+            <span class="bg-gradient-to-r from-purple-600 to-indigo-600 text-transparent bg-clip-text font-bold">{{ comments|length }}</span> comments shared
+        </p>
+        
+        <div class="mt-16 grid gap-10 md:grid-cols-2 lg:grid-cols-2">
+            {% for comment in comments %}
+                <div class="group bg-white overflow-hidden rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="p-8">
+                        {% if comment.photofilename %}
+                            <div class="mb-6">
                                 <img 
                                     src="{{ asset('uploads/photos/' ~ comment.photofilename) }}" 
-                                    alt="User Photo" 
-                                    class="w-16 h-16 rounded-full mx-auto mb-4 object-cover"
+                                    alt="Photo de {{ comment.author }}" 
+                                    class="w-20 h-20 rounded-full mx-auto object-cover ring-4 ring-purple-50"
                                 />
-                            {% endif %}
-                            <h4 class="text-2xl font-bold text-gray-900 mb-2 text-center">{{ comment.author }}</h4>
-                            <small class="block text-sm text-gray-500 text-center">{{ comment.createdAt|format_datetime('medium', 'short') }}</small>
-                            <p class="mt-4 text-lg text-gray-700 text-center">{{ comment.text }}</p>
+                            </div>
+                        {% endif %}
+                        
+                        <h4 class="text-2xl font-bold text-gray-900 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-indigo-600 transition-all">
+                            {{ comment.author }}
+                        </h4>
+                        
+                        <div class="mt-2 flex items-center justify-center space-x-2 text-sm text-gray-500">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>{{ comment.createdAt|format_datetime('medium', 'short') }}</span>
                         </div>
-                    {% endfor %}
+                        
+                        <div class="mt-6">
+                            <p class="text-lg text-gray-600 leading-relaxed">{{ comment.text }}</p>
+                        </div>
+                    </div>
                 </div>
+            {% endfor %}
+        </div>
 
-                <div class="flex justify-center items-center mt-8">
-                    {% if previous >= 0 %}
-                        <a href="{{ path('conference', { id: conference.id, offset: previous }) }}"
-                           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-4">
-                            Previous
-                        </a>
-                    {% endif %}
+        <div class="flex justify-center items-center mt-12 space-x-4">
+            {% if previous >= 0 %}
+                <a href="{{ path('conference', { slug: conference.slug, offset: previous }) }}"
+                   class="inline-flex items-center px-6 py-3 text-base font-medium rounded-xl text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 transform transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <svg class="mr-2 -ml-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+                    </svg>
+                    <span>Previous</span>
+                </a>
+            {% endif %}
 
-                    {% if next < comments|length %}
-                        <a href="{{ path('conference', { id: conference.id, offset: next }) }}"
-                           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Next
-                        </a>
-                    {% endif %}
-                </div>
-            {% else %}
-                <p class="text-center text-gray-500 text-xl mt-5">
-                    No comments have been posted yet for this conference.
-                </p>
+            {% if next < comments|length %}
+                <a href="{{ path('conference', { slug: conference.slug, offset: next }) }}"
+                   class="inline-flex items-center px-6 py-3 text-base font-medium rounded-xl text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 transform transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <span>Next</span>
+                    <svg class="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </a>
             {% endif %}
         </div>
-    </div>
+    {% else %}
+        <div class="mt-16 text-center">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            <h3 class="mt-2 text-xl font-medium text-gray-900">No comments yet</h3>
+            <p class="mt-1 text-gray-500">Be the first to share your thoughts about this conference!</p>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
