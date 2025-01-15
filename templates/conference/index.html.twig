@@ -3,20 +3,38 @@
 {% block title %}Conference GuestBook{% endblock %}
 
 {% block body %}
-<div class="container mx-auto p-4">
-  <h1 class="text-4xl font-bold text-center mb-6">Conference GuestBook</h1>
-  
-  <div class="bg-white shadow-md rounded-lg p-6 border border-gray-300">
-    <h2 class="text-2xl font-semibold text-gray-800 text-center mb-4">Give your feedback!</h2>
-    <div class="space-y-4">
-      {% for conference in conferences %}
-    <a href="{{ path('conference', { id: conference.id }) }}" class="block p-4 bg-gray-100 rounded-lg shadow-sm border border-gray-200 hover:shadow-lg transition-shadow">
-        <h4 class="text-lg font-medium text-gray-700 text-center">{{ conference.city }} {{conference.year}}</h4>
-    </a>
-{% else %}
-    <p class="text-center text-gray-500">Aucune conférence disponible pour le moment.</p>
-{% endfor %}
+<div class="min-h-screen bg-gray-100">
+    <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl sm:tracking-tight lg:text-6xl">
+                Conference
+            </h1>
+            <p class="mt-5 max-w-xl mx-auto text-xl text-gray-500">
+                Give your feedback!
+            </p>
+        </div>
+        
+        <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-2">
+            {% if conferences|length > 0 %}
+                {% for conference in conferences %}
+                    <div class="bg-white overflow-hidden shadow rounded-lg transition-all hover:shadow-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2 text-center">
+                                {{ conference.city }} {{ conference.year }}
+                            </h3>
+                            <div class="flex justify-center items-center mt-4">  <!-- Ajout de justify-center et items-center -->
+                                <a href="{{ path('conference', { id: conference.id }) }}" 
+                                   class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center text-gray-500">Aucune conférence disponible pour le moment.</p>
+            {% endif %}
+        </div>
     </div>
-  </div>
 </div>
 {% endblock %}
