@@ -1,5 +1,14 @@
 twig:
     file_name_pattern: '*.twig'
+    default_path: '%kernel.project_dir%/templates'
+    paths: []
+    date:
+        format: 'F j, Y H:i'
+        timezone: 'Europe/Paris'
+    number_format:
+        decimals: 0
+        decimal_point: ','
+        thousands_separator: '.'
 
 when@test:
     twig:

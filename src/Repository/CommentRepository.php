@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Comment;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Conference;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Comment>
@@ -15,6 +17,22 @@ class CommentRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Comment::class);
     }
+
+    public const PAGINATOR_PER_PAGE = 2;
+    
+       public function getCommentPaginator(Conference $conference, int $offset): Paginator
+        {
+            $query = $this->createQueryBuilder('c')
+                ->andWhere('c.conference = :conference')
+                ->setParameter('conference', $conference)
+                ->orderBy('c.createdAt', 'DESC')
+                ->setMaxResults(self::PAGINATOR_PER_PAGE)
+                ->setFirstResult($offset)
+                ->getQuery()
+            ;
+    
+            return new Paginator($query);
+        }
 
     //    /**
     //     * @return Comment[] Returns an array of Comment objects
