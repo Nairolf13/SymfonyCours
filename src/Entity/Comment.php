@@ -7,8 +7,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
+#[ORM\HasLifecycleCallbacks]  // Ceci est correct pour activer les hooks de cycle de vie
 class Comment implements \Stringable
-
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -34,11 +34,13 @@ class Comment implements \Stringable
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $photoFilename = null;
 
+    // Getter et setter pour l'ID
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    // Getter et setter pour l'auteur
     public function getAuthor(): ?string
     {
         return $this->author;
@@ -47,10 +49,10 @@ class Comment implements \Stringable
     public function setAuthor(string $author): static
     {
         $this->author = $author;
-
         return $this;
     }
 
+    // Getter et setter pour le texte
     public function getText(): ?string
     {
         return $this->text;
@@ -59,10 +61,10 @@ class Comment implements \Stringable
     public function setText(string $text): static
     {
         $this->text = $text;
-
         return $this;
     }
 
+    // Getter et setter pour l'email
     public function getEmail(): ?string
     {
         return $this->email;
@@ -71,22 +73,22 @@ class Comment implements \Stringable
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
+    // Getter et setter pour la date de création
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
-
         return $this;
     }
 
+    // Getter et setter pour la conférence associée
     public function getConference(): ?Conference
     {
         return $this->conference;
@@ -95,24 +97,34 @@ class Comment implements \Stringable
     public function setConference(?Conference $conference): static
     {
         $this->conference = $conference;
-
         return $this;
     }
 
+    // Getter et setter pour le nom de fichier photo
     public function getPhotoFilename(): ?string
     {
         return $this->photoFilename;
     }
 
-    public function __toString(): string
-        {
-            return (string) $this->getEmail();
-        }
-
-    public function setPhotoFilename(string $photoFilename): static
+    public function setPhotoFilename(?string $photoFilename): static
     {
         $this->photoFilename = $photoFilename;
-
         return $this;
     }
+
+    // Méthode qui sera appelée avant la persistance
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        if ($this->createdAt === null) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
+    }
+
+    // Méthode __toString pour l'entité Comment
+    public function __toString(): string
+    {
+        return (string) $this->getEmail();
+    }
 }
+
