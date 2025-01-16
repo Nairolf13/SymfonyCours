@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Trait\Timestampable;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ConferenceRepository;
 use Doctrine\Common\Collections\Collection;
@@ -10,9 +11,12 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ConferenceRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[UniqueEntity('slug')]
 class Conference implements \Stringable
 {
+    use Timestampable;
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -27,8 +31,10 @@ class Conference implements \Stringable
     #[ORM\Column]
     private ?bool $isInternational = null;
 
+
+
     /**
-     * @var Collection<int, comment>
+     * @var Collection<int, Comment>
      */
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'conference', orphanRemoval: true)]
     private Collection $comments;
@@ -43,9 +49,8 @@ class Conference implements \Stringable
 
     public function __toString(): string
     {
-        return $this->city . ' ' . $this->year;
+        return $this->city.' | '.$this->year;
     }
-
 
     public function getId(): ?int
     {
@@ -53,7 +58,7 @@ class Conference implements \Stringable
     }
 
     public function computeSlug(SluggerInterface $slugger) : static
-   {
+    {
         if (!$this->slug || '-' === $this->slug) {
             $this->slug = (string) $slugger->slug((string) $this)->lower();
         }
@@ -90,7 +95,7 @@ class Conference implements \Stringable
         return $this->isInternational;
     }
 
-    public function setisInternational(bool $isInternational): static
+    public function setIsInternational(bool $isInternational): static
     {
         $this->isInternational = $isInternational;
 
@@ -98,7 +103,7 @@ class Conference implements \Stringable
     }
 
     /**
-     * @return Collection<int, comment>
+     * @return Collection<int, Comment>
      */
     public function getComments(): Collection
     {

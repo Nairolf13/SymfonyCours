@@ -2,16 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Entity\Trait\Timestampable;
+use App\Repository\ProductRepository;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-#[UniqueEntity('slug')]
-class Product
+#[ORM\HasLifecycleCallbacks]
+class Product implements \Stringable
 {
+    use Timestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -26,33 +27,19 @@ class Product
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\Column(length: 255, unique: true)]
-    private ?string $slug = null;
-
-
-    
     public function __toString(): string
-        {
-            return $this->name.' '.$this->price .$this->description .$this->category;
-        }
+    {
+        return $this->name;
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
-
-    public function computeSlug(SluggerInterface $slugger) : static
-    {
-         if (!$this->slug || '-' === $this->slug) {
-             $this->slug = (string) $slugger->slug((string) $this)->lower();
-         }
- 
-         return $this;
-     }
 
     public function getName(): ?string
     {
@@ -101,18 +88,6 @@ class Product
 
         return $this;
     }
+
     
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): static
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
 }
-
-
