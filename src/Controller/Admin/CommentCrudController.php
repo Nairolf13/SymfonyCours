@@ -50,16 +50,7 @@ class CommentCrudController extends AbstractCrudController
             ->setUploadedFileNamePattern(fn(UploadedFile $photo) => Comment::setFilename($photo))
             ->setBasePath('/uploads/photos')
             ->setLabel('Photo');
-            yield ImageField::new('photoFilename')
-            ->setUploadDir('public/uploads/photos')
-            ->setUploadedFileNamePattern(fn(UploadedFile $photo) => Comment::setFilename($photo))
-            ->setBasePath('uploads/photos')
-            ->setLabel('Photo')
-            ->setFormTypeOptions([
-                'csrf_protection' => true,
-                'csrf_field_name' => '_token',
-                'csrf_token_id'   => 'comment_item',
-            ]);
+           
         yield DateTimeField::new('createdAt')
             ->setRequired(false)
             ->setTimezone('Europe/Paris')
