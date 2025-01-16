@@ -50,7 +50,7 @@ class CommentCrudController extends AbstractCrudController
             ->setUploadedFileNamePattern(fn(UploadedFile $photo) => Comment::setFilename($photo))
             ->setBasePath('/uploads/photos')
             ->setLabel('Photo');
-           
+
         yield DateTimeField::new('createdAt')
             ->setRequired(false)
             ->setTimezone('Europe/Paris')

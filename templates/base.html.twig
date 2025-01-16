@@ -21,14 +21,18 @@
                 </h1>
 
                 <nav class="flex space-x-4">
+                                         <nav class="flex space-x-4">
                     <a href="{{ path('app_product') }}" class="hover:text-gray-400">Products</a>
                     <a href="{{ path('homepage') }}" class="hover:text-gray-400">Conferences</a>
                     {% if is_granted('ROLE_ADMIN') %}
                         <a href="{{ path('admin') }}" class="text-purple-300 hover:text-purple-100">Admin</a>
-                        <a href="{{ path('app_logout') }}" class="text-red-300 hover:text-red-100">Logout</a>
                     {% endif %}
+                   {% if is_granted('IS_AUTHENTICATED_FULLY')%}
+                        <a href="{{ path('app_logout') }}" class="hover:text-gray-400">Logout</a>
+                   {% endif %}
                 </nav>
             </div>
+
         </header>
 
         <main class="container mx-auto px-4 py-8">
@@ -36,3 +40,4 @@
         </main>
     </body>
 </html>
+
