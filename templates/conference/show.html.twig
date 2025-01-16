@@ -4,11 +4,11 @@
 
 {% block body %}
 <div class="text-center relative mb-12">
-    <div class="absolute inset-0 flex items-center justify-center opacity-5">
+    {# <div class="absolute inset-0 flex items-center justify-center opacity-5">
         <svg class="w-64 h-64" viewBox="0 0 24 24" fill="currentColor">
             <path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/>
         </svg>
-    </div>
+    </div> #}
     <h2 class="text-5xl font-black text-gray-900 sm:text-6xl sm:tracking-tight lg:text-7xl bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-indigo-600">
         {{ conference }} Conference
     </h2>
@@ -81,5 +81,8 @@
             <p class="mt-1 text-gray-500">Be the first to share your thoughts about this conference!</p>
         </div>
     {% endif %}
+    <h2>Add your own feedback</h2>
+
+    {{ form(comment_form) }}
 </div>
 {% endblock %}

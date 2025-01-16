@@ -8,12 +8,15 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+
 
 class CommentCrudController extends AbstractCrudController
 {
@@ -42,8 +45,21 @@ class CommentCrudController extends AbstractCrudController
         yield TextField::new('author');
         yield EmailField::new('email');
         yield TextareaField::new('text');
-        yield TextField::new('photoFilename')
-            ->onlyOnIndex();
+        yield ImageField::new('photoFilename')
+            ->setUploadDir('/public/uploads/photos')
+            ->setUploadedFileNamePattern(fn(UploadedFile $photo) => Comment::setFilename($photo))
+            ->setBasePath('/uploads/photos')
+            ->setLabel('Photo');
+            yield ImageField::new('photoFilename')
+            ->setUploadDir('public/uploads/photos')
+            ->setUploadedFileNamePattern(fn(UploadedFile $photo) => Comment::setFilename($photo))
+            ->setBasePath('uploads/photos')
+            ->setLabel('Photo')
+            ->setFormTypeOptions([
+                'csrf_protection' => true,
+                'csrf_field_name' => '_token',
+                'csrf_token_id'   => 'comment_item',
+            ]);
         yield DateTimeField::new('createdAt')
             ->setRequired(false)
             ->setTimezone('Europe/Paris')
