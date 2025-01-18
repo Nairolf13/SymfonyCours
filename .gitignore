@@ -1,8 +1,8 @@
 
 ###> symfony/framework-bundle ###
-/.env.local
-/.env.local.php
-/.env.*.local
+.env.local
+.env.local.php
+.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /var/
@@ -24,3 +24,7 @@
 /assets/vendor/
 ###< symfony/asset-mapper ###
 /public/uploads
+
+.env
+*.env
+**/*.env
